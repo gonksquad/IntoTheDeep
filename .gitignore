@@ -84,3 +84,4 @@ lint/tmp/
 /.idea
 
 .vscode/settings.json
+.vscode/tasks.json

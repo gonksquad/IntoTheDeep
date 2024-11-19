@@ -1,0 +1,29 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build and Install APK",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-command",
+        "\"./gradlew assembleDebug --console=rich; \"",
+        "\"$device = adb devices | Select-String 'device$' | ForEach-Object { $_ -replace '\\tdevice', '' } | Select-Object -First 1; \"",
+        "\"if ($device) { \"",
+        "\"adb -s $device uninstall com.qualcomm.ftcrobotcontroller; \"",
+        "\"adb -s $device install -r TeamCode\\build\\outputs\\apk\\debug\\TeamCode-debug.apk; \"",
+        "\"$startResult = adb -s $device shell monkey -p com.qualcomm.ftcrobotcontroller -c android.intent.category.LAUNCHER 1; \"",
+        "\"Write-Host $startResult; \"",
+        "\"} else { \"",
+        "\"Write-Host 'No online devices found.'; \"",
+        "\"}\""
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": [],
+      "detail": "Builds and deploys the debug APK to the Control Hub."
+    }
+  ]
+}
